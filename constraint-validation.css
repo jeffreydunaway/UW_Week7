@@ -1,0 +1,10 @@
+{
+    padding:0px;
+    margin:0px;
+}
+.invalid{
+    box-shadow: red 2px 2px 5px;
+}
+.valid{
+    box-shadow: green 2px 2px  5px;
+}
