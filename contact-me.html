@@ -1,10 +1,65 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact Me</title>
+    <title>Contact JEFFREY DUNAWAY</title>
+    <link rel="stylesheet" 
+        href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" 
+        integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" 
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="contactME.css">
   </head>
 
   <body>
     <!-- TODO -->
+    <div class="wrapper">
+      <div class="box">
+        <h2>Contact Me</h2>
+        <form id="contactForm" class="pure-form" action="">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" class="pure-input-rounded" placeholder="Enter your name"/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="pure-input-rounded" placeholder="Enter your Email">
+          </div>
+          <div class="form-group">
+            <label for="contactReason">Reason</label>
+            <select name="contactReason" id="reason" class="pure-input-rounded" aria-placeholder="Choose">
+              <option value="" disabled selected>Choose an Option</option>
+              <option value="jobOPP">Job Opportunity</option>
+              <option value="talkCode">Talk Code</option>
+            </select>
+          </div>
+          <div id="talkCode" class="form-group" hidden>
+            <label for="language">Language</label>
+              <select name="language" id="language-option" class="pure-input-rounded" aria-placeholder="Choose">
+                <option value="" disabled selected>Choose an Option</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="sql">SQL: MySQL</option>
+                <option value="css">CSS</option>
+                <option value="html">HTML5</option>
+              </select>
+          </div>
+          <div id="jobInfo" class="form-group" hidden>
+            <label for="job">About</label>
+            <input name="job-title"type="text" class="pure-input-2" placeholder="Job title" />
+            <input name="company-site" type="url" class="pure-input-2" placeholder="Website link">
+          </div>
+          <div class="form-group">
+            <fieldset class="pure-group">
+              <label for="message">Send a message</label>
+              <input name="title" type="text" id="messageTitle" class="pure-input-2" placeholder="Title" />
+              <textarea name="message" id="messageText" class="pure-input" placeholder="Enter Message..." cols="40" rows="5"></textarea>
+          </fieldset>
+          </div>
+          <div class="form-group">
+            <input type="submit" id="submitBtn" value="Contact Me">
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="contact-me.js"></script>
   </body>
 </html>
