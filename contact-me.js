@@ -1,5 +1,3 @@
-//FORM 
-
 const form = document.forms['contactForm']
 
 const emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
