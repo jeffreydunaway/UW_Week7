@@ -179,7 +179,7 @@ const nameValidation = ()=>{
         form['name'].closest('.form-group').classList.add('valid')
     }
 }
-// There is a endless loop unsure why but this is the only way to stop it
+
 let alertCounter = 0
 function validations(e){
     flexOptionShower();
