@@ -1,212 +1,134 @@
-const form = document.forms['contactForm']
+// Get contact form element
+const form = document.getElementById('contact-form');
+// Get customer name element
+const cname = document.getElementById('cus-name');
+// Get email element
+const email = document.getElementById('email');
+// Get message element
+const message = document.getElementById('message');
 
-const emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
 
-// this validates ex: www.google.com/test || www.google.com || google.com || https://www.google.com/test || http://www.google.com/test || https://www.google.com || http://www.google.com
-const urlRegex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
+// Get <select> element with id is 'contact-kind'
+const contact = document.getElementById('contact-kind');
+// Get div element with id = 'job'
+const job = document.getElementById('job');
+// Get div element with id = 'code'
+const code = document.getElementById('code');
+// Get job title element with id = 'title'
+const title = document.getElementById('title');
+// Get company url element with id = 'company'
+const companyURL = document.getElementById('company');
+// Get coding language element
+const language = document.getElementById('language');
 
 
-let errors = 0
+const checkValidation = (e) => {
+  // Get the state of cname
+  const nameValidState = cname.value.trim().length > 2;
+  // Get email value without space
+  const emailValue = email.value.trim();
+  const isEmail = /\w+@\w+\.\w+/.test(emailValue);
+  // Check if the length of message > 9 or not
+  const messageValidState = message.value.trim().length > 9;
 
-const messageValidation = ()=>{
-    if(form['message'].value === '' || form['message'].value.length<10){
-        form['message'].validity.valid = false
-        form['message'].setCustomValidity('Please enter a message')
-        form['message'].closest('.form-group').classList.remove('valid')
-        form['message'].closest('.form-group').classList.add('invalid')
-        errors+=1
+  // Get the value of title
+  const titleValue = title.value.trim();
+  // Get company url
+  const url = companyURL.value.trim();
+  const isURL = /https?\:\/\/.+\..+/.test(url);
+  // Get language value
+  const languageValue = language.value;
+
+  // Check if the customer name is valid or not
+  if (!nameValidState) {
+    e.preventDefault();
+    // Call function setInvalidInput to show error message
+    setInvalidInput(cname, 'Your name must be 3 characters or more!');
+  } else {
+    setValidInput(cname);
+  }
+  // Check if the email is valid or not
+  if (emailValue === '') {
+    e.preventDefault();
+    setInvalidInput(email, 'Email cannot be blank. Please enter your email!');
+  } else if (!isEmail) {
+    e.preventDefault();
+    setInvalidInput(email, 'Email is invalid. Please re-enter your email.');
+  } else {
+    setValidInput(email);
+  }
+  // Check if the message is valid or not
+  if (!messageValidState) {
+    e.preventDefault();
+    // Call function setInvalidInput to show error message
+    setInvalidInput(message, 'Your message must be 10 characters or more!');
+  } else {
+    setValidInput(message);
+  }
+
+  //Check if <job> element is displayed or not
+  if (job.style.display === 'block') {
+    // Check if the title is valid or not
+    if (titleValue === '') {
+      e.preventDefault();
+      setInvalidInput(title, 'Job title cannot be blank. Please enter your job title!');
+    } else {
+      setValidInput(title);
     }
-    else{
-        form['message'].validity.valid = true
-        form['message'].setCustomValidity('')
-        form['message'].closest('.form-group').classList.add('valid')
-        form['message'].closest('.form-group').classList.remove('invalid')
+    // Check if the url is valid or not
+    if (url === '') {
+      e.preventDefault();
+      setInvalidInput(companyURL, 'Company website cannot be blank. Please enter your company website!');      
+    } else if (!isURL) {
+      e.preventDefault();
+      setInvalidInput(companyURL, 'Company website is invalid. Please re-enter your company website!');
+    } else {
+      setValidInput(companyURL);
     }
+  }
+  // Check if <code> element is displayed or not
+  if (code.style.display === 'block') {
+    if (languageValue === 'choose') {
+      e.preventDefault();
+      setInvalidInput(language, 'Please choose a coding language!');
+    } else {
+      setValidInput(language);
+    };
+  }
+
+};
+
+// Fires form's submit listener
+form.addEventListener('submit', checkValidation);
+
+// Define function setInvalidInputField to show info about invalid input
+function setInvalidInput(input, message) {
+  // Get parent element of the current input field
+  const formGroup = input.parentElement;
+  // Get element 'small'
+  const small = formGroup.querySelector('small');
+  // Add class name 'invalid' to the parent element
+  formGroup.classList.add('invalid');
+  // Remove class name 'valid' from the parent element
+  formGroup.classList.remove('valid');
+  // Using small element to show an error message in HTML page
+  small.innerText = message;
 }
 
-const titleValidation = ()=>{
-    if(form['title'].value === '' || form['title'].value.length<3){
-        form['title'].validity.valid = false
-        form['title'].setCustomValidity('Please enter a title')
-        form['title'].closest('.form-group').classList.remove('valid')
-        form['title'].closest('.form-group').classList.add('invalid')
-        errors+=1
-    }
-    else{
-        form['title'].validity.valid = true
-        form['title'].setCustomValidity('')
-        form['title'].closest('.form-group').classList.add('valid')
-        form['title'].closest('.form-group').classList.remove('invalid')
-    }
+// Define function setValidInputField
+function setValidInput(input) {
+  // Get parent element of the current input field
+  const formGroup = input.parentElement;
+  // Add class name 'valid' to the parent element
+  formGroup.classList.add('valid');
+  // Remove class name 'invalid' from the parent element
+  formGroup.classList.remove('invalid');  
 }
 
-
-const flexOptionValidation = ()=>{
-    // debugger
-    let talkCode = document.getElementById('talkCode')
-    let jobField = document.getElementById('jobInfo')
-    // EdgeCase coverage if flexOptionShower() doesnt fire if it does, this wont effect it
-    if(form['contactReason'].value === 'jobOPP'){
-        talkCode.setAttribute('hidden', '')
-        jobField.removeAttribute("hidden")
-        if(form['job-title'].value == "" || form['job-title'].value.length<3){
-            errors+=1
-            form['job-title'].setCustomValidity("Write a job title")
-            form['job-title'].validity.valid = false
-            form['job-title'].closest('.form-group').classList.remove('valid')
-            form['job-title'].closest('.form-group').classList.add('invalid')
-            console.log('here')
-        }
-        if(!form['company-site'].value.match(urlRegex) || form['company-site'].value == ""){
-            errors+=1
-            form['company-site'].validity.valid = false
-            form['company-site'].setCustomValidity("Enter a valid URL")
-            form['company-site'].closest('.form-group').classList.remove('valid')
-            form['company-site'].closest('.form-group').classList.add('invalid')
-        }
-        else{
-
-            form['job-title'].setCustomValidity('')
-            form['job-title'].validity.valid = true
-            form['job-title'].closest('.form-group').classList.remove('invalid')
-            form['job-title'].closest('.form-group').classList.add('valid')
-
-            form['company-site'].setCustomValidity('')
-            form['company-site'].validity.valid = true
-            form['company-site'].closest('.form-group').classList.add('valid')
-            form['company-site'].closest('.form-group').classList.remove('invalid')
-        }
-    }
-    if(form['contactReason'].value === "talkCode"){
-        jobField.setAttribute('hidden', '')
-        talkCode.removeAttribute('hidden')
-        if(form['language'].value == ""){
-            errors+=1
-            form['language'].validity.valid = false
-            form['language'].setCustomValidity("Select a language")
-            form['language'].closest('.form-group').classList.remove('valid')
-            form['language'].closest('.form-group').classList.add('invalid')
-        }else{
-            form['language'].setCustomValidity('')
-            form['language'].validity.valid = true
-            form['language'].closest('.form-group').classList.remove('invalid')
-            form['language'].closest('.form-group').classList.add('valid')
-        }
-        form['language'].addEventListener('change', (e)=>{
-            if(form['language'].value == ""){
-                form['language'].validity.valid = false
-                form['language'].setCustomValidity("Choose a language")
-                form['language'].closest('.form-group').classList.remove('valid')
-                form['language'].closest('.form-group').classList.add('invalid')
-            }else{
-                form['language'].validity.valid = true
-                form['language'].setCustomValidity('')
-                form['language'].closest('.form-group').classList.remove('invalid')
-                form['language'].closest('.form-group').classList.add('valid')
-            }
-        })
-    }
-}
-
-const reasonValidation =()=>{
-    if(form['contactReason'].value ==""){
-        errors+=1
-        form['contactReason'].setCustomValidity("Choose a reason for contact")
-        form['contactReason'].validity.valid= false
-        form['contactReason'].closest('.form-group').classList.remove('valid')
-        form['contactReason'].closest('.form-group').classList.add('invalid')
-    }else{
-        form['contactReason'].setCustomValidity('')
-        form['contactReason'].validity.valid = true
-        form['contactReason'].closest('.form-group').classList.remove('invalid')
-        form['contactReason'].closest('.form-group').classList.add('valid')
-    }
-}
-
-const flexOptionShower= ()=>{
-    let talkCode = document.getElementById('talkCode')
-    let jobField = document.getElementById('jobInfo')
-    form['contactReason'].addEventListener('change', ()=>{
-        if(form['contactReason'].value == 'jobOPP'){
-            jobField.removeAttribute("hidden");
-            talkCode.setAttribute("hidden", true)
-        }
-        if(form['contactReason'].value =="talkCode"){
-            talkCode.removeAttribute("hidden")
-            // if you use an empty string for true it saves 8bits of memory
-            jobField.setAttribute("hidden", '')
-        }
-    })
-    return 0
-}
-
-const emailValidation = ()=>{
-    if(!form['email'].value.match(emailRegex)){
-        errors+=1
-        if(form['email'].value ==""){
-            errors+=1
-            form['email'].validity.valid = false
-            form['email'].setCustomValidity("Enter a email")
-            form['email'].closest('.form-group').classList.remove('valid')
-            form['email'].closest('.form-group').classList.add('invalid')
-        }
-        else{
-        form['email'].validity.valid = false
-        form['email'].setCustomValidity("Enter a valid Email")
-        form['email'].closest('.form-group').classList.remove('valid')
-        form['email'].closest('.form-group').classList.add('invalid')}
-    }else{
-        form['email'].validity.valid = true
-        form['email'].setCustomValidity('')
-        form['email'].closest('.form-group').classList.remove('invalid')
-        form['email'].closest('.form-group').classList.add('valid')
-    }
-}
-
-const nameValidation = ()=>{
-    if(form['name'].value.length < 3 || form['name'].value === ""){
-        errors+=1
-        form['name'].setCustomValidity('Name must be at least 3 characters')
-        form['name'].closest('.form-group').classList.remove('valid')
-        form['name'].closest('.form-group').classList.add('invalid')
-        form['name'].validity.valid = false
-        form['name'].reportValidity()
-    }else{
-        form['name'].reportValidity()
-        form['name'].validity.valid = true
-        form['name'].setCustomValidity('')
-        form['name'].closest('.form-group').classList.remove('invalid')
-        form['name'].closest('.form-group').classList.add('valid')
-    }
-}
-
-let alertCounter = 0
-function validations(e){
-    flexOptionShower();
-    nameValidation();
-    emailValidation();
-    reasonValidation();
-    flexOptionValidation();
-    titleValidation();
-    messageValidation();
-    console.log(errors)
-    if(errors === 0){
-        if(alertCounter === 0){
-            alert('Your message has been sent')
-            alertCounter+=1
-            form.submit()
-        }   
-    }else{
-        e.preventDefault()
-        errors = 0
-        form['submitBtn'].addEventListener('click', (e)=>{validations(e)})
-    }
-}
-
-// Event Listeners
-flexOptionShower();
-
-// This event needs to get fired before submit so the flexOptions can show
-
-
-form.addEventListener('submit', (e)=>{validations(e)})
+// Fires <select> element listener
+contact.addEventListener('change', e => {
+  // if option <job> is selected
+  job.style.display = e.target.value === 'job'? 'block': 'none';
+  // If option <code> is selected
+  code.style.display = e.target.value === 'code'? 'block': 'none';
+});
